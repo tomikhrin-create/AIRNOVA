@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulátor výkonu kotle — AIRNOVA</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#f5f6fa;color:#1a1a2e;min-height:100vh;padding:2rem 1rem}
+.container{max-width:640px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:2rem}
+.brand-dot{width:10px;height:10px;border-radius:50%;background:#F27C2E}
+.brand-name{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:600;color:#2A2B5A;letter-spacing:.04em}
+.header{margin-bottom:1.5rem}
+.header h1{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:600;color:#2A2B5A;line-height:1.3}
+.header p{font-size:14px;color:#666;margin-top:6px}
+.card{background:#fff;border:1px solid #e8e9f0;border-radius:14px;padding:1.25rem;margin-bottom:12px}
+.card.solar-card{border:1.5px solid #e8a020}
+.stitle{font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem;font-family:'Montserrat',sans-serif}
+.stitle.solar{color:#b87800}
+.field{margin-bottom:1rem}.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:13px;color:#555;margin-bottom:6px}
+.field-row{display:flex;align-items:center;gap:10px}
+input[type=range]{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:#e0e1ee;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#2A2B5A;cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 1px #2A2B5A}
+.val{font-size:14px;font-weight:500;color:#2A2B5A;min-width:56px;text-align:right}
+.seg-group{display:flex;gap:6px;flex-wrap:wrap}
+.seg{font-size:12px;padding:5px 12px;border-radius:8px;border:1px solid #e0e1ee;background:#f8f9fc;color:#666;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.seg:hover{border-color:#46A1C7;color:#46A1C7}
+.seg.active{background:#2A2B5A;border-color:#2A2B5A;color:#fff}
+.num-input{display:flex;align-items:center;gap:8px}
+.num-btn{width:30px;height:30px;border:1px solid #e0e1ee;background:#f8f9fc;color:#2A2B5A;border-radius:8px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.num-btn:hover{background:#2A2B5A;color:#fff;border-color:#2A2B5A}
+.num-val{font-size:16px;font-weight:500;color:#2A2B5A;min-width:28px;text-align:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.result-main{background:#2A2B5A;border-radius:14px;padding:1.25rem;margin-top:12px}
+.rl{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:6px;font-family:'Montserrat',sans-serif}
+.rkw{font-size:34px;font-weight:600;color:#fff;line-height:1;font-family:'Montserrat',sans-serif}
+.rsub{font-size:13px;color:rgba(255,255,255,.6);margin-top:6px}
+.meter-bar{height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin-top:10px;overflow:hidden}
+.meter-fill{height:100%;border-radius:2px;background:#46A1C7;transition:width .4s}
+.solar-saving-strip{background:rgba(232,160,32,.15);border:0.5px solid rgba(232,160,32,.4);border-radius:8px;padding:8px 12px;margin-top:10px;display:none}
+.solar-saving-strip.visible{display:flex;align-items:center;justify-content:space-between}
+.ssl{font-size:12px;color:rgba(255,255,255,.7)}
+.ssv{font-size:14px;font-weight:500;color:#ffc93c}
+
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cmp-card{background:#fff;border:1px solid #e8e9f0;border-radius:14px;padding:1rem;position:relative}
+.cmp-card.best{border:2px solid #46A1C7}
+.best-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#46A1C7;color:#fff;font-size:10px;font-weight:600;padding:2px 10px;border-radius:20px;white-space:nowrap;font-family:'Montserrat',sans-serif}
+.cmp-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.cmp-icon.gas{background:#fff3e0}
+.cmp-icon.hp{background:#e3f2fd}
+.cmp-icon.el{background:#fce4ec}
+.cmp-name{font-size:12px;font-weight:600;color:#2A2B5A;margin-bottom:8px;line-height:1.4;font-family:'Montserrat',sans-serif}
+.cmp-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.cmp-label{font-size:11px;color:#aaa}
+.cmp-val{font-size:12px;font-weight:500;color:#333}
+.cmp-divider{border:none;border-top:1px solid #f0f0f0;margin:8px 0}
+.cmp-annual-label{font-size:10px;color:#aaa;margin-bottom:2px}
+.cmp-annual-val{font-size:14px;font-weight:600;color:#2A2B5A;font-family:'Montserrat',sans-serif}
+.cmp-solar-save{font-size:11px;color:#b87800;margin-top:4px;display:none}
+.cmp-solar-save.visible{display:block}
+.cmp-net{font-size:12px;font-weight:500;color:#1a4a3a;margin-top:2px;display:none}
+.cmp-net.visible{display:block}
+
+.navratnost-strip{background:#fff;border:1px solid #e8e9f0;border-radius:10px;padding:10px 14px;margin-top:10px;display:none}
+.navratnost-strip.visible{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.nsl{font-size:12px;color:#888}
+.nsv{font-size:13px;font-weight:600;color:#2A2B5A;font-family:'Montserrat',sans-serif}
+
+.cta-banner{background:#F27C2E;border-radius:14px;padding:1.25rem 1.5rem;margin-top:16px;display:none}
+.cta-banner.visible{display:block}
+.cta-title{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:600;color:#fff;line-height:1.5;margin-bottom:4px}
+.cta-sub{font-size:13px;color:rgba(255,255,255,.85)}
+.cta-btn{margin-top:12px;background:#fff;border:none;color:#F27C2E;font-size:13px;font-weight:600;padding:10px 22px;border-radius:8px;cursor:pointer;font-family:'Montserrat',sans-serif}
+.cta-btn:hover{opacity:.9}
+
+.lead-form{background:#fff;border:1px solid #e8e9f0;border-radius:14px;padding:1.25rem;margin-top:12px;display:none}
+.lead-form.visible{display:block}
+.lead-form h2{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:600;color:#2A2B5A;margin-bottom:4px}
+.lead-form p{font-size:13px;color:#666;margin-bottom:1rem;line-height:1.5}
+.benefits{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem}
+.benefit{display:flex;align-items:flex-start;gap:12px;background:#f8f9fc;border-radius:10px;padding:10px 12px}
+.bicon{width:32px;height:32px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.bicon.teal{background:#46A1C7}.bicon.orange{background:#F27C2E}.bicon.navy{background:#2A2B5A}
+.bicon svg{width:15px;height:15px}
+.benefit-text strong{font-size:13px;color:#2A2B5A;font-weight:600;display:block;margin-bottom:2px;font-family:'Montserrat',sans-serif}
+.benefit-text span{font-size:12px;color:#777;line-height:1.5}
+.inp-row{display:flex;gap:8px;margin-bottom:10px}
+.inp-row input{flex:1;padding:10px 14px;border:1px solid #e0e1ee;border-radius:8px;background:#f8f9fc;color:#1a1a2e;font-size:14px;font-family:'DM Sans',sans-serif;transition:border-color .15s}
+.inp-row input:focus{outline:none;border-color:#46A1C7;background:#fff}
+.submit-btn{width:100%;background:#2A2B5A;border:none;color:#fff;font-size:14px;font-weight:600;padding:12px;border-radius:8px;cursor:pointer;font-family:'Montserrat',sans-serif;letter-spacing:.02em;transition:opacity .15s}
+.submit-btn:hover{opacity:.88}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+.gdpr{font-size:11px;color:#aaa;margin-top:8px;line-height:1.6}
+.success-card{background:#fff;border:1px solid #e8e9f0;border-radius:14px;padding:1.5rem;margin-top:12px;display:none;text-align:center}
+.success-card.visible{display:block}
+.success-icon{width:52px;height:52px;border-radius:50%;background:#1a4a3a;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.success-title{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:600;color:#2A2B5A;margin-bottom:6px}
+.success-sub{font-size:13px;color:#666;line-height:1.6}
+.hint{font-size:11px;color:#aaa;margin-top:14px;line-height:1.6}
+@media(max-width:500px){.compare-grid{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="brand"><div class="brand-dot"></div><div class="brand-name">AIRNOVA</div></div>
+  <div class="header">
+    <h1>Kalkulátor výkonu kotle</h1>
+    <p>Doporučený výkon, porovnání typů a vliv solárního systému</p>
+  </div>
+
+  <div class="card">
+    <div class="stitle">Radiátory</div>
+    <div class="field">
+      <label>Typ radiátorů</label>
+      <div class="seg-group" id="typ-rad">
+        <div class="seg" data-val="0.9">Článkové litinové</div>
+        <div class="seg active" data-val="1.0">Deskové ocelové</div>
+        <div class="seg" data-val="1.1">Trubkové / designové</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Průměrná velikost radiátoru</label>
+      <div class="seg-group" id="vel-rad">
+        <div class="seg" data-val="0.6">Malý (~500 W)</div>
+        <div class="seg active" data-val="1.0">Střední (~1 200 W)</div>
+        <div class="seg" data-val="1.5">Velký (~2 000 W)</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Počet radiátorů</label>
+      <div class="num-input">
+        <button class="num-btn" id="rad-minus">−</button>
+        <span class="num-val" id="rad-val">6</span>
+        <button class="num-btn" id="rad-plus">+</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stitle">Budova</div>
+    <div class="field">
+      <label>Typ budovy</label>
+      <div class="seg-group" id="typ-bud">
+        <div class="seg active" data-val="1.0">Rodinný dům</div>
+        <div class="seg" data-val="0.7">Byt / patro</div>
+        <div class="seg" data-val="1.4">RD s podkrovím</div>
+        <div class="seg" data-val="2.2">Větší objekt</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Izolace budovy</label>
+      <div class="seg-group" id="izolace">
+        <div class="seg" data-val="1.4">Starší — bez zateplení</div>
+        <div class="seg active" data-val="1.0">Standardní (po 2000)</div>
+        <div class="seg" data-val="0.75">Zateplená novostavba</div>
+        <div class="seg" data-val="0.55">Pasivní dům</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Stáří otopné soustavy</label>
+      <div class="seg-group" id="stari">
+        <div class="seg" data-val="1.1">Před 2000 — vysokoteplotní</div>
+        <div class="seg active" data-val="1.0">2000–2015</div>
+        <div class="seg" data-val="0.9">Po 2015 — nízkoteplotní</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Podlahové vytápění</label>
+      <div class="seg-group" id="podlaha">
+        <div class="seg active" data-val="0">Nemám</div>
+        <div class="seg" data-val="1.5">Část domu</div>
+        <div class="seg" data-val="3.0">Celý dům</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Příprava teplé vody (TV)</label>
+      <div class="seg-group" id="tv">
+        <div class="seg" data-val="0">Ne — boiler / solar</div>
+        <div class="seg active" data-val="2">Ano — kotel ohřívá TV</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card solar-card">
+    <div class="stitle solar">Solární systém</div>
+    <div class="field">
+      <label>Máte solární kolektory / FVE s ohřevem?</label>
+      <div class="seg-group" id="solar-yn">
+        <div class="seg active" data-val="0">Nemám</div>
+        <div class="seg" data-val="1">Mám</div>
+      </div>
+    </div>
+    <div id="solar-detail" style="display:none">
+      <div class="field" style="margin-top:1rem">
+        <label>Co solar pokrývá?</label>
+        <div class="seg-group" id="solar-typ">
+          <div class="seg" data-tv="0.6" data-heat="0">Jen TV</div>
+          <div class="seg" data-tv="0" data-heat="0.15">Jen přitápění</div>
+          <div class="seg active" data-tv="0.6" data-heat="0.15">TV + přitápění</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Počet kolektorů / velikost FVE</label>
+        <div class="seg-group" id="solar-vel">
+          <div class="seg" data-val="0.7">Malý (2–3 kolektory / do 3 kWp)</div>
+          <div class="seg active" data-val="1.0">Střední (4–6 / 3–6 kWp)</div>
+          <div class="seg" data-val="1.4">Velký (7+ / nad 6 kWp)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-main">
+    <div class="rl">Doporučený výkon kotle</div>
+    <div class="rkw" id="rkw">—</div>
+    <div class="rsub" id="rsub">—</div>
+    <div class="meter-bar"><div class="meter-fill" id="rmeter" style="width:0%"></div></div>
+    <div class="solar-saving-strip" id="solar-strip">
+      <span class="ssl">Solar sníží potřebný výkon o</span>
+      <span class="ssv" id="solar-strip-val">—</span>
+    </div>
+  </div>
+
+  <div class="compare-grid">
+    <div class="cmp-card" id="cmp-gas">
+      <div class="cmp-icon gas"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F27C2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10"/><path d="M12 8c0 4-4 6-4 6h8s-4-2-4-6z"/></svg></div>
+      <div class="cmp-name">Plynový kondenzační</div>
+      <div class="cmp-row"><span class="cmp-label">Pořizovák</span><span class="cmp-val" id="gas-price">—</span></div>
+      <div class="cmp-row"><span class="cmp-label">Účinnost</span><span class="cmp-val">96–109 %</span></div>
+      <hr class="cmp-divider">
+      <div class="cmp-annual-label">Roční provoz</div>
+      <div class="cmp-annual-val" id="gas-annual">—</div>
+      <div class="cmp-solar-save" id="gas-solar-save">—</div>
+      <div class="cmp-net" id="gas-net">—</div>
+    </div>
+    <div class="cmp-card" id="cmp-hp">
+      <div class="cmp-icon hp"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#46A1C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <div class="cmp-name">Tepelné čerpadlo vzduch-voda</div>
+      <div class="cmp-row"><span class="cmp-label">Pořizovák</span><span class="cmp-val" id="hp-price">—</span></div>
+      <div class="cmp-row"><span class="cmp-label">COP</span><span class="cmp-val">2,8–4,2</span></div>
+      <hr class="cmp-divider">
+      <div class="cmp-annual-label">Roční provoz</div>
+      <div class="cmp-annual-val" id="hp-annual">—</div>
+      <div class="cmp-solar-save" id="hp-solar-save">—</div>
+      <div class="cmp-net" id="hp-net">—</div>
+    </div>
+    <div class="cmp-card" id="cmp-el">
+      <div class="cmp-icon el"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <div class="cmp-name">Elektrický kotel</div>
+      <div class="cmp-row"><span class="cmp-label">Pořizovák</span><span class="cmp-val" id="el-price">—</span></div>
+      <div class="cmp-row"><span class="cmp-label">Účinnost</span><span class="cmp-val">99–100 %</span></div>
+      <hr class="cmp-divider">
+      <div class="cmp-annual-label">Roční provoz</div>
+      <div class="cmp-annual-val" id="el-annual">—</div>
+      <div class="cmp-solar-save" id="el-solar-save">—</div>
+      <div class="cmp-net" id="el-net">—</div>
+    </div>
+  </div>
+
+  <div class="navratnost-strip" id="navratnost-strip">
+    <div><div class="nsl">Návratnost TČ vs. plynový kotel</div><div class="nsv" id="navratnost-val">—</div></div>
+    <div><div class="nsl">Roční úspora TČ</div><div class="nsv" id="usp-val">—</div></div>
+  </div>
+
+  <div class="cta-banner" id="cta-banner">
+    <div class="cta-title" id="cta-text">—</div>
+    <div class="cta-sub">Bezplatná konzultace — porovnáme konkrétní modely pro váš dům bez prodejního tlaku.</div>
+    <button class="cta-btn" id="cta-btn">Chci konkrétní nabídku</button>
+  </div>
+
+  <div class="lead-form" id="lead-form">
+    <h2>Získejte konkrétní nabídku zdarma</h2>
+    <p>Zanechte telefon — připravíme výběr kotlů s cenami montáže přímo pro váš dům.</p>
+    <div class="benefits">
+      <div class="benefit">
+        <div class="bicon teal"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div class="benefit-text"><strong>Garance montáže do 7 dní</strong><span>Rezervujeme termín ihned. Platí v MSK.</span></div>
+      </div>
+      <div class="benefit">
+        <div class="bicon orange"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div class="benefit-text"><strong>Konzultace výběru kotle zdarma</strong><span>Plynový, TČ nebo elektro — poradíme co se vyplatí.</span></div>
+      </div>
+      <div class="benefit">
+        <div class="bicon navy"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="benefit-text"><strong>Výpočet návratnosti investice</strong><span>Ukážeme přesnou návratnost přechodu na TČ nebo kondenzační kotel.</span></div>
+      </div>
+    </div>
+    <div class="inp-row"><input type="text" id="inp-jmeno" placeholder="Jméno"></div>
+    <div class="inp-row"><input type="tel" id="inp-tel" placeholder="Telefon (+420 ...)"></div>
+    <button class="submit-btn" id="submit-btn">Odeslat a získat nabídku</button>
+    <p class="gdpr">Váš telefon použijeme pouze pro tuto poptávku. Žádný spam, žádné další kontaktování bez vašeho souhlasu.</p>
+  </div>
+
+  <div class="success-card" id="success-card">
+    <div class="success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#4ac9a0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <div class="success-title">Přijato — ozveme se do 24 hodin</div>
+    <div class="success-sub" id="success-text">Připravíme konkrétní nabídku kotlů a ceník montáže.</div>
+  </div>
+
+  <p class="hint">Výpočet dle jmenovitého výkonu radiátorů + korekce izolace, typu budovy a stáří soustavy. Solární úspora: TV 60 % pokrytí (6 měs./rok), přitápění 15 % roční redukce. Ceny energie: plyn 1,8 Kč/kWh, elektřina 5,5 Kč/kWh, COP TČ 3,2. Orientační hodnoty.</p>
+</div>
+
+<script>
+const AIRTABLE_WEBHOOK='DOPLNIT_URL';
+let radCount=6,lastKw=0,lastParams={};
+
+function getActive(id){const el=document.querySelector('#'+id+' .seg.active');return el?parseFloat(el.dataset.val):1.0}
+function getActiveLabel(id){const el=document.querySelector('#'+id+' .seg.active');return el?el.textContent.trim():''}
+function fmt(n){return Math.round(n).toLocaleString('cs-CZ')}
+
+function getSolar(){
+  const yn=getActive('solar-yn');
+  if(!yn)return{active:false,tvFrac:0,heatFrac:0,scale:1.0};
+  const typEl=document.querySelector('#solar-typ .seg.active');
+  const tv=typEl?parseFloat(typEl.dataset.tv):0.6;
+  const heat=typEl?parseFloat(typEl.dataset.heat):0.15;
+  const scale=getActive('solar-vel');
+  return{active:true,tvFrac:tv*scale,heatFrac:heat*scale,scale};
+}
+
+function priceGas(kW){if(kW<15)return '45–65 tis. Kč';if(kW<25)return '55–80 tis. Kč';return '70–110 tis. Kč'}
+function priceHp(kW){if(kW<10)return '180–250 tis. Kč';if(kW<18)return '220–320 tis. Kč';return '300–450 tis. Kč'}
+function priceEl(kW){if(kW<15)return '25–40 tis. Kč';if(kW<25)return '35–55 tis. Kč';return '50–80 tis. Kč'}
+function rawGas(kW){return kW*2000*0.85*1.8}
+function rawHp(kW){return kW*2000/3.2*5.5}
+function rawEl(kW){return kW*2000*0.99*5.5}
+function solarSave(rawCost,tvFrac,heatFrac){return rawCost*(0.25*Math.min(tvFrac,1)+0.75*Math.min(heatFrac,1))}
+function bestType(g,h,e){if(h<=g&&h<=e)return 'hp';if(g<=h&&g<=e)return 'gas';return 'el'}
+function typLabel(t){if(t==='gas')return 'plynový kondenzační kotel';if(t==='hp')return 'tepelné čerpadlo vzduch-voda';return 'elektrický kotel'}
+function recLabel(kW){if(kW<10)return 'Malý dům / byt';if(kW<18)return 'Standardní rodinný dům';if(kW<30)return 'Větší rodinný dům';return 'Velký objekt — doporučujeme odborný projekt'}
+
+function calc(){
+  const kTypRad=getActive('typ-rad'),kVelRad=getActive('vel-rad'),kTypBud=getActive('typ-bud');
+  const kIzol=getActive('izolace'),kStari=getActive('stari'),tvBonus=getActive('tv');
+  const podlahaBonus=getActive('podlaha'),solar=getSolar();
+  const baseKw=radCount*1.2*kVelRad*kTypRad;
+  let kw=Math.round((baseKw*kTypBud*kIzol*kStari+tvBonus+podlahaBonus)*10)/10;
+  let solarReduction=0;
+  if(solar.active){
+    const heatRed=kw*solar.heatFrac;
+    const tvRed=tvBonus>0?Math.min(tvBonus*solar.tvFrac,tvBonus):0;
+    solarReduction=Math.round((heatRed+tvRed)*10)/10;
+    kw=Math.max(Math.round((kw-solarReduction)*10)/10,3);
+  }
+  lastKw=kw;
+  document.getElementById('rkw').textContent=kw.toFixed(1)+' kW';
+  document.getElementById('rsub').textContent=recLabel(kw);
+  document.getElementById('rmeter').style.width=Math.min(100,Math.round(kw/40*100))+'%';
+  const ss=document.getElementById('solar-strip');
+  if(solar.active&&solarReduction>0){ss.classList.add('visible');document.getElementById('solar-strip-val').textContent=solarReduction.toFixed(1)+' kW ('+Math.round(solarReduction/(kw+solarReduction)*100)+' %)';}
+  else{ss.classList.remove('visible')}
+  const gRaw=rawGas(kw),hRaw=rawHp(kw),eRaw=rawEl(kw);
+  let gSave=0,hSave=0,eSave=0;
+  if(solar.active){gSave=solarSave(gRaw,solar.tvFrac,solar.heatFrac);hSave=solarSave(hRaw,solar.tvFrac,solar.heatFrac);eSave=solarSave(eRaw,solar.tvFrac,solar.heatFrac);}
+  const gNet=gRaw-gSave,hNet=hRaw-hSave,eNet=eRaw-eSave;
+  document.getElementById('gas-price').textContent=priceGas(kw);
+  document.getElementById('hp-price').textContent=priceHp(kw);
+  document.getElementById('el-price').textContent=priceEl(kw);
+  document.getElementById('gas-annual').textContent=fmt(gRaw)+' Kč/rok';
+  document.getElementById('hp-annual').textContent=fmt(hRaw)+' Kč/rok';
+  document.getElementById('el-annual').textContent=fmt(eRaw)+' Kč/rok';
+  ['gas','hp','el'].forEach(t=>{
+    const save={gas:gSave,hp:hSave,el:eSave}[t];
+    const net={gas:gNet,hp:hNet,el:eNet}[t];
+    const saveEl=document.getElementById(t+'-solar-save');
+    const netEl=document.getElementById(t+'-net');
+    if(solar.active&&save>0){saveEl.classList.add('visible');saveEl.textContent='− '+fmt(save)+' Kč solar';netEl.classList.add('visible');netEl.textContent='= '+fmt(net)+' Kč/rok čistě';}
+    else{saveEl.classList.remove('visible');netEl.classList.remove('visible');}
+  });
+  ['gas','hp','el'].forEach(t=>{document.getElementById('cmp-'+t).classList.remove('best');const old=document.getElementById('cmp-'+t).querySelector('.best-badge');if(old)old.remove();});
+  const best=bestType(gNet,hNet,eNet);
+  const bc=document.getElementById('cmp-'+best);
+  bc.classList.add('best');
+  const badge=document.createElement('div');badge.className='best-badge';badge.textContent='Nejvýhodnější';bc.appendChild(badge);
+  const navEl=document.getElementById('navratnost-strip');
+  const rocniUsp=gNet-hNet;
+  if(rocniUsp>0){navEl.classList.add('visible');document.getElementById('navratnost-val').textContent='~'+Math.round(180000/rocniUsp)+' let';document.getElementById('usp-val').textContent=fmt(rocniUsp)+' Kč/rok';}
+  else{navEl.classList.remove('visible')}
+  lastParams={pocet_radiatoru:radCount,typ_radiatoru:getActiveLabel('typ-rad'),velikost_radiatoru:getActiveLabel('vel-rad'),typ_budovy:getActiveLabel('typ-bud'),izolace:getActiveLabel('izolace'),stari_soustavy:getActiveLabel('stari'),podlahove_vytapeni:getActiveLabel('podlaha'),tepla_voda:getActiveLabel('tv'),solar:solar.active?'ano':'ne',doporuceny_vykon:kw.toFixed(1)+' kW',nejlepsi_typ:typLabel(best)};
+  document.getElementById('cta-banner').classList.add('visible');
+  document.getElementById('cta-text').textContent='Váš dům potřebuje kotel '+kw.toFixed(1)+' kW. Nejvýhodnější volba je '+typLabel(best)+(solar.active?' — solar sníží provozní náklady o '+fmt(Math.max(gSave,hSave,eSave))+' Kč/rok':'')+'. Chcete konkrétní modely a ceny montáže?';
+  document.getElementById('solar-detail').style.display=solar.active?'block':'none';
+}
+
+document.getElementById('rad-minus').addEventListener('click',()=>{if(radCount>1){radCount--;document.getElementById('rad-val').textContent=radCount;calc();}});
+document.getElementById('rad-plus').addEventListener('click',()=>{if(radCount<30){radCount++;document.getElementById('rad-val').textContent=radCount;calc();}});
+document.querySelectorAll('.seg-group').forEach(grp=>{
+  grp.querySelectorAll('.seg').forEach(seg=>{
+    seg.addEventListener('click',()=>{grp.querySelectorAll('.seg').forEach(s=>s.classList.remove('active'));seg.classList.add('active');calc();});
+  });
+});
+document.getElementById('cta-btn').addEventListener('click',()=>{
+  document.getElementById('cta-banner').classList.remove('visible');
+  document.getElementById('lead-form').classList.add('visible');
+  document.getElementById('lead-form').scrollIntoView({behavior:'smooth',block:'start'});
+});
+document.getElementById('submit-btn').addEventListener('click',async()=>{
+  const jmeno=document.getElementById('inp-jmeno').value.trim();
+  const tel=document.getElementById('inp-tel').value.trim();
+  if(!tel){document.getElementById('inp-tel').focus();return;}
+  const btn=document.getElementById('submit-btn');btn.disabled=true;btn.textContent='Odesílám...';
+  const payload={jmeno,telefon:tel,timestamp:new Date().toISOString(),zdroj:'kalkulátor-kotel',...lastParams};
+  if(AIRTABLE_WEBHOOK!=='DOPLNIT_URL'){try{await fetch(AIRTABLE_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(e){}}
+  document.getElementById('lead-form').style.display='none';
+  const sc=document.getElementById('success-card');sc.classList.add('visible');
+  document.getElementById('success-text').textContent=(jmeno?jmeno+', p':'P')+'řipravíme konkrétní výběr kotlů pro výkon '+lastKw.toFixed(1)+' kW. Ozveme se do 24 hodin.';
+  sc.scrollIntoView({behavior:'smooth',block:'start'});
+});
+calc();
+</script>
+</body>
+</html>
