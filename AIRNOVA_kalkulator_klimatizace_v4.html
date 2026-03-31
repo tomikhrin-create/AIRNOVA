@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulátor výkonu klimatizace — AIRNOVA</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#f5f6fa;color:#1a1a2e;min-height:100vh;padding:2rem 1rem}
+.container{max-width:640px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:2rem}
+.brand-dot{width:10px;height:10px;border-radius:50%;background:#F27C2E}
+.brand-name{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:600;color:#2A2B5A;letter-spacing:.04em}
+.header{margin-bottom:1.5rem}
+.header h1{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:600;color:#2A2B5A;line-height:1.3}
+.header p{font-size:14px;color:#666;margin-top:6px}
+.card{background:#fff;border:1px solid #e8e9f0;border-radius:14px;padding:1.25rem;margin-bottom:12px}
+.section-title{font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem;font-family:'Montserrat',sans-serif}
+.field{margin-bottom:1rem}.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:13px;color:#555;margin-bottom:6px}
+.field-row{display:flex;align-items:center;gap:10px}
+input[type=range]{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:#e0e1ee;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#2A2B5A;cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 1px #2A2B5A}
+.val{font-size:14px;font-weight:500;color:#2A2B5A;min-width:56px;text-align:right}
+.seg-group{display:flex;gap:6px;flex-wrap:wrap}
+.seg{font-size:12px;padding:5px 12px;border-radius:8px;border:1px solid #e0e1ee;background:#f8f9fc;color:#666;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.seg:hover{border-color:#46A1C7;color:#46A1C7}
+.seg.active{background:#2A2B5A;border-color:#2A2B5A;color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.num-input{display:flex;align-items:center;gap:8px}
+.num-input button{width:30px;height:30px;border:1px solid #e0e1ee;background:#f8f9fc;color:#2A2B5A;border-radius:8px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.num-input button:hover{background:#2A2B5A;color:#fff;border-color:#2A2B5A}
+.num-input span{font-size:16px;font-weight:500;color:#2A2B5A;min-width:24px;text-align:center}
+.results{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.res-card{border-radius:14px;padding:1.25rem}
+.res-card.chlazeni{background:#2A2B5A}
+.res-card.topeni{background:#1a4a3a}
+.res-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;color:rgba(255,255,255,.5);font-family:'Montserrat',sans-serif}
+.res-kw{font-size:28px;font-weight:600;color:#fff;line-height:1;font-family:'Montserrat',sans-serif}
+.res-btu{font-size:13px;font-weight:500;margin-top:4px}
+.res-card.chlazeni .res-btu{color:#46A1C7}
+.res-card.topeni .res-btu{color:#4ac9a0}
+.res-rec{font-size:12px;color:rgba(255,255,255,.6);margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.1);line-height:1.5}
+.meter-bar{height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin-top:8px;overflow:hidden}
+.meter-fill-c{height:100%;border-radius:2px;background:#46A1C7;transition:width .3s}
+.meter-fill-t{height:100%;border-radius:2px;background:#4ac9a0;transition:width .3s}
+.price-strip{background:#fff;border:1px solid #e8e9f0;border-radius:10px;padding:10px 14px;margin-top:10px;display:none;align-items:center;justify-content:space-between}
+.price-strip span{font-size:12px;color:#888}
+.price-strip strong{font-size:14px;font-weight:600;color:#2A2B5A;font-family:'Montserrat',sans-serif}
+.cta-banner{background:#F27C2E;border-radius:14px;padding:1.25rem 1.5rem;margin-top:16px;display:none}
+.cta-banner.visible{display:block}
+.cta-title{font-size:15px;font-weight:600;color:#fff;line-height:1.5;margin-bottom:4px;font-family:'Montserrat',sans-serif}
+.cta-sub{font-size:13px;color:rgba(255,255,255,.85)}
+.cta-btn{margin-top:12px;background:#fff;border:none;color:#F27C2E;font-size:13px;font-weight:600;padding:10px 22px;border-radius:8px;cursor:pointer;transition:opacity .15s;font-family:'Montserrat',sans-serif}
+.cta-btn:hover{opacity:.9}
+.lead-form{background:#fff;border:1px solid #e8e9f0;border-radius:14px;padding:1.25rem;margin-top:12px;display:none}
+.lead-form.visible{display:block}
+.lead-form h2{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:600;color:#2A2B5A;margin-bottom:4px}
+.lead-form p{font-size:13px;color:#666;margin-bottom:1rem;line-height:1.5}
+.benefits{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem}
+.benefit{display:flex;align-items:flex-start;gap:12px;background:#f8f9fc;border-radius:10px;padding:10px 12px}
+.bicon{width:32px;height:32px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.bicon.teal{background:#46A1C7}
+.bicon.orange{background:#F27C2E}
+.bicon.navy{background:#2A2B5A}
+.bicon svg{width:15px;height:15px}
+.benefit-text strong{font-size:13px;color:#2A2B5A;font-weight:600;display:block;margin-bottom:2px;font-family:'Montserrat',sans-serif}
+.benefit-text span{font-size:12px;color:#777;line-height:1.5}
+.inp-row{display:flex;gap:8px;margin-bottom:10px}
+.inp-row input{flex:1;padding:10px 14px;border:1px solid #e0e1ee;border-radius:8px;background:#f8f9fc;color:#1a1a2e;font-size:14px;font-family:'DM Sans',sans-serif;transition:border-color .15s}
+.inp-row input:focus{outline:none;border-color:#46A1C7;background:#fff}
+.submit-btn{width:100%;background:#2A2B5A;border:none;color:#fff;font-size:14px;font-weight:600;padding:12px;border-radius:8px;cursor:pointer;transition:opacity .15s;font-family:'Montserrat',sans-serif;letter-spacing:.02em}
+.submit-btn:hover{opacity:.88}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+.gdpr{font-size:11px;color:#aaa;margin-top:8px;line-height:1.6}
+.success-card{background:#fff;border:1px solid #e8e9f0;border-radius:14px;padding:1.5rem;margin-top:12px;display:none;text-align:center}
+.success-card.visible{display:block}
+.success-icon{width:52px;height:52px;border-radius:50%;background:#1a4a3a;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.success-title{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:600;color:#2A2B5A;margin-bottom:6px}
+.success-sub{font-size:13px;color:#666;line-height:1.6;margin-bottom:1rem}
+.hint{font-size:11px;color:#aaa;margin-top:14px;line-height:1.6}
+@media(max-width:480px){.results,.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="brand"><div class="brand-dot"></div><div class="brand-name">AIRNOVA</div></div>
+
+  <div class="header">
+    <h1>Kalkulátor výkonu klimatizace</h1>
+    <p>Odhad výkonu pro chlazení a topení — rodinné domy, byty, kanceláře</p>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Rozměry místnosti</div>
+    <div class="field">
+      <label>Plocha místnosti</label>
+      <div class="field-row">
+        <input type="range" id="plocha" min="5" max="100" value="20" step="1">
+        <span class="val" id="plocha-val">20 m²</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Výška stropu</label>
+      <div class="field-row">
+        <input type="range" id="vyska" min="230" max="400" value="260" step="5">
+        <span class="val" id="vyska-val">2,60 m</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Okna</div>
+    <div class="grid2">
+      <div class="field">
+        <label>Počet oken</label>
+        <div class="num-input">
+          <button id="okna-minus">−</button>
+          <span id="okna-val">1</span>
+          <button id="okna-plus">+</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Velikost oken</label>
+        <div class="seg-group" id="okna-vel" style="flex-direction:column;gap:4px">
+          <div class="seg" data-val="0.9">Malé (do 0,8 m²)</div>
+          <div class="seg active" data-val="1.0">Střední (0,8–1,5 m²)</div>
+          <div class="seg" data-val="1.15">Velké (1,5–2,5 m²)</div>
+          <div class="seg" data-val="1.35">Prosklená stěna</div>
+        </div>
+      </div>
+    </div>
+    <div class="field" style="margin-top:1rem">
+      <label>Orientace hlavního okna</label>
+      <div class="seg-group" id="orientace">
+        <div class="seg" data-val="0.85">Sever</div>
+        <div class="seg active" data-val="1.0">Východ / Západ</div>
+        <div class="seg" data-val="1.2">Jih</div>
+        <div class="seg" data-val="1.3">Jihozápad</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Charakter místnosti</div>
+    <div class="field">
+      <label>Typ prostoru</label>
+      <div class="seg-group" id="typ">
+        <div class="seg active" data-val="1.0">Obytný pokoj</div>
+        <div class="seg" data-val="1.05">Ložnice</div>
+        <div class="seg" data-val="1.15">Kancelář</div>
+        <div class="seg" data-val="1.3">Kuchyně</div>
+        <div class="seg" data-val="0.9">Chodba / tech.</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Izolace budovy</label>
+      <div class="seg-group" id="izolace">
+        <div class="seg" data-val="1.25">Starší — bez izolace</div>
+        <div class="seg active" data-val="1.0">Standardní</div>
+        <div class="seg" data-val="0.85">Novostavba / nízkoenergetická</div>
+        <div class="seg" data-val="0.7">Pasivní dům</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Poloha místnosti v budově</label>
+      <div class="seg-group" id="poloha">
+        <div class="seg" data-val="1.15">Nejvyšší podlaží / pod střechou</div>
+        <div class="seg active" data-val="1.0">Střední podlaží</div>
+        <div class="seg" data-val="0.9">Přízemí / suterén</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="results">
+    <div class="res-card chlazeni">
+      <div class="res-label">Chlazení</div>
+      <div class="res-kw" id="kw-chlazeni">—</div>
+      <div class="res-btu" id="btu-chlazeni">—</div>
+      <div class="meter-bar"><div class="meter-fill-c" id="meter-c" style="width:0%"></div></div>
+      <div class="res-rec" id="rec-chlazeni">—</div>
+    </div>
+    <div class="res-card topeni">
+      <div class="res-label">Topení (TČ)</div>
+      <div class="res-kw" id="kw-topeni">—</div>
+      <div class="res-btu" id="btu-topeni">—</div>
+      <div class="meter-bar"><div class="meter-fill-t" id="meter-t" style="width:0%"></div></div>
+      <div class="res-rec" id="rec-topeni">—</div>
+    </div>
+  </div>
+
+  <div class="price-strip" id="price-strip">
+    <span>Orientační cena dodávka + montáž:</span>
+    <strong id="price-range">—</strong>
+  </div>
+
+  <div class="cta-banner" id="cta-banner">
+    <div class="cta-title" id="cta-text">—</div>
+    <div class="cta-sub">Bezplatná konzultace bez prodejních scénářů. Výsledek do 24 hodin.</div>
+    <button class="cta-btn" id="cta-btn">Chci konkrétní modely a ceny</button>
+  </div>
+
+  <div class="lead-form" id="lead-form">
+    <h2>Získejte kompletní přehled zdarma</h2>
+    <p>Zanechte telefon a připravíme konkrétní doporučení modelů s cenami — bez závazků.</p>
+    <div class="benefits">
+      <div class="benefit">
+        <div class="bicon teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="benefit-text">
+          <strong>Garance montáže do 7 dní</strong>
+          <span>Po zadání telefonu rezervujeme termín. Platí pro nové zákazníky v MSK.</span>
+        </div>
+      </div>
+      <div class="benefit">
+        <div class="bicon orange">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="benefit-text">
+          <strong>Konzultace výběru jednotek zdarma</strong>
+          <span>Porovnáme modely pro vaše použití — bez prodejního tlaku.</span>
+        </div>
+      </div>
+      <div class="benefit">
+        <div class="bicon navy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="benefit-text">
+          <strong>Přesný výpočet výkonu zdarma</strong>
+          <span>Odborný výpočet dle EN 12831 přímo pro vaši místnost.</span>
+        </div>
+      </div>
+    </div>
+    <div class="inp-row"><input type="text" id="inp-jmeno" placeholder="Jméno"></div>
+    <div class="inp-row"><input type="tel" id="inp-tel" placeholder="Telefon (+420 ...)"></div>
+    <button class="submit-btn" id="submit-btn">Odeslat a získat doporučení</button>
+    <p class="gdpr">Váš telefon použijeme pouze pro tuto poptávku. Žádný spam, žádné další kontaktování bez vašeho souhlasu.</p>
+  </div>
+
+  <div class="success-card" id="success-card">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#4ac9a0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="success-title">Přijato — ozveme se do 24 hodin</div>
+    <div class="success-sub" id="success-text">Připravíme konkrétní doporučení modelů a ceník montáže. Termín do 7 dní garantujeme.</div>
+  </div>
+
+  <p class="hint">Výpočet vychází ze zjednodušené metody dle EN 12831. Korekce topení +25 % (zimní podmínky MSK, −12 °C). Pro přesný projekt doporučujeme odbornou konzultaci.</p>
+</div>
+
+<script>
+const AIRTABLE_WEBHOOK='DOPLNIT_URL';
+let oknaCount=1,lastKwC=0,lastParams={};
+
+function getActive(id){const el=document.querySelector('#'+id+' .seg.active');return el?parseFloat(el.dataset.val):1.0}
+function getActiveLabel(id){const el=document.querySelector('#'+id+' .seg.active');return el?el.textContent.trim():''}
+function recC(kW){if(kW<2.0)return 'Split 2,0 kW (série R7)';if(kW<2.6)return 'Split 2,5 kW';if(kW<3.6)return 'Split 3,5 kW — nejprodávanější';if(kW<5.1)return 'Split 5,0 kW';if(kW<7.1)return 'Split 7,0 kW';return 'Multi-split nebo komerční jednotka'}
+function recT(kW){if(kW<2.0)return 'Split 2,0 kW (topný režim)';if(kW<3.0)return 'Split 2,5–3,0 kW';if(kW<4.5)return 'Split 3,5–4,0 kW';if(kW<6.5)return 'Split 5,0–6,0 kW';if(kW<9.0)return 'Split 7,0–8,0 kW';return 'Multi-split nebo TČ vzduch–vzduch'}
+function trida(kW){if(kW<2.5)return 'kompaktní jednotku';if(kW<4.0)return 'jednotku střední třídy';if(kW<6.0)return 'výkonnou jednotku';return 'komerční nebo multi-split systém'}
+function priceRange(kW){if(kW<2.0)return '18 000–25 000 Kč';if(kW<2.6)return '22 000–30 000 Kč';if(kW<3.6)return '25 000–38 000 Kč';if(kW<5.1)return '35 000–52 000 Kč';if(kW<7.1)return '48 000–70 000 Kč';return 'individuální nacenění'}
+function pct(kW,max){return Math.min(100,Math.round(kW/max*100))}
+
+function calc(){
+  const plocha=parseInt(document.getElementById('plocha').value);
+  const vyska=parseInt(document.getElementById('vyska').value)/100;
+  const kOrient=getActive('orientace'),kOknaVel=getActive('okna-vel'),kTyp=getActive('typ'),kIzol=getActive('izolace'),kPoloha=getActive('poloha');
+  const kOknaCount=1+(oknaCount-1)*0.06,kObjem=(plocha*vyska)>60?1.05:1.0;
+  const rawC=plocha*50*kOrient*kOknaVel*kOknaCount*kTyp*kIzol*kPoloha*kObjem;
+  const kwC=Math.round(rawC/100)/10,kwT=Math.round(rawC*1.25/100)/10;
+  lastKwC=kwC;
+  lastParams={plocha:plocha+' m²',vyska:vyska.toFixed(2).replace('.',',')+' m',pocet_oken:oknaCount,velikost_oken:getActiveLabel('okna-vel'),orientace:getActiveLabel('orientace'),typ_prostoru:getActiveLabel('typ'),izolace:getActiveLabel('izolace'),poloha:getActiveLabel('poloha'),vykon_chlazeni:kwC.toFixed(1)+' kW',vykon_topeni:kwT.toFixed(1)+' kW',orientacni_cena:priceRange(kwC)};
+  document.getElementById('kw-chlazeni').textContent=kwC.toFixed(1)+' kW';
+  document.getElementById('btu-chlazeni').textContent=Math.round(kwC*3412).toLocaleString('cs-CZ')+' BTU/h';
+  document.getElementById('rec-chlazeni').textContent=recC(kwC);
+  document.getElementById('meter-c').style.width=pct(kwC,10)+'%';
+  document.getElementById('kw-topeni').textContent=kwT.toFixed(1)+' kW';
+  document.getElementById('btu-topeni').textContent=Math.round(kwT*3412).toLocaleString('cs-CZ')+' BTU/h';
+  document.getElementById('rec-topeni').textContent=recT(kwT);
+  document.getElementById('meter-t').style.width=pct(kwT,14)+'%';
+  const ps=document.getElementById('price-strip');ps.style.display='flex';
+  document.getElementById('price-range').textContent=priceRange(kwC);
+  document.getElementById('cta-banner').classList.add('visible');
+  document.getElementById('cta-text').textContent='Váš výsledek: '+kwC.toFixed(1)+' kW chlazení — odpovídá to '+trida(kwC)+'. Chcete vědět, jaké konkrétní modely to splňují a za kolik?';
+}
+
+document.querySelectorAll('input[type=range]').forEach(inp=>{
+  inp.addEventListener('input',()=>{
+    if(inp.id==='plocha') document.getElementById('plocha-val').textContent=inp.value+' m²';
+    if(inp.id==='vyska') document.getElementById('vyska-val').textContent=(inp.value/100).toFixed(2).replace('.',',')+' m';
+    calc();
+  });
+});
+document.querySelectorAll('.seg-group').forEach(grp=>{
+  grp.querySelectorAll('.seg').forEach(seg=>{
+    seg.addEventListener('click',()=>{grp.querySelectorAll('.seg').forEach(s=>s.classList.remove('active'));seg.classList.add('active');calc();});
+  });
+});
+document.getElementById('okna-minus').addEventListener('click',()=>{if(oknaCount>1){oknaCount--;document.getElementById('okna-val').textContent=oknaCount;calc();}});
+document.getElementById('okna-plus').addEventListener('click',()=>{if(oknaCount<8){oknaCount++;document.getElementById('okna-val').textContent=oknaCount;calc();}});
+document.getElementById('cta-btn').addEventListener('click',()=>{
+  document.getElementById('cta-banner').classList.remove('visible');
+  document.getElementById('lead-form').classList.add('visible');
+  document.getElementById('lead-form').scrollIntoView({behavior:'smooth',block:'start'});
+});
+document.getElementById('submit-btn').addEventListener('click',async()=>{
+  const jmeno=document.getElementById('inp-jmeno').value.trim();
+  const tel=document.getElementById('inp-tel').value.trim();
+  if(!tel){document.getElementById('inp-tel').focus();return;}
+  const btn=document.getElementById('submit-btn');btn.disabled=true;btn.textContent='Odesílám...';
+  const payload={jmeno,telefon:tel,timestamp:new Date().toISOString(),zdroj:'kalkulátor-klimatizace',...lastParams};
+  if(AIRTABLE_WEBHOOK!=='DOPLNIT_URL'){try{await fetch(AIRTABLE_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(e){}}
+  document.getElementById('lead-form').style.display='none';
+  const sc=document.getElementById('success-card');sc.classList.add('visible');
+  document.getElementById('success-text').textContent=(jmeno?jmeno+', p':'P')+'řipravíme konkrétní doporučení modelů a ceník montáže pro výkon '+lastKwC.toFixed(1)+' kW. Termín do 7 dní garantujeme.';
+  sc.scrollIntoView({behavior:'smooth',block:'start'});
+});
+
+calc();
+</script>
+</body>
+</html>
