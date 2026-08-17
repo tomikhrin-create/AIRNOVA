@@ -111,73 +111,107 @@
   .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
   .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--navy); margin: 5px 0; }
 
-  /* HERO — Turing style */
+  /* HERO — Turing layout */
   .hero {
     background: var(--navy-dark);
-    padding: 100px 5% 64px;
-    min-height: 540px;
+    height: 100vh;
+    min-height: 600px;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
+    padding: 0 5%;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg { position: absolute; inset: 0; z-index: 0; }
+  .hero-bg img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(100deg,
+      rgba(26,27,58,0.97) 0%,
+      rgba(26,27,58,0.90) 32%,
+      rgba(26,27,58,0.58) 62%,
+      rgba(26,27,58,0.28) 100%);
   }
   .hero-inner {
+    position: relative; z-index: 2;
     width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    gap: 40px;
+    gap: 60px;
   }
-  .hero-content { max-width: 780px; }
+  .hero-content { display: flex; flex-direction: column; align-items: flex-start; max-width: 720px; }
   .hero h1 {
     font-family: var(--font-head); font-weight: 800;
-    font-size: 42px;
-    color: #fff; line-height: 1.12;
-    letter-spacing: -0.02em; margin-bottom: 1.25rem;
+    font-size: clamp(32px, 4.2vw, 64px);
+    color: #fff; line-height: 1.08;
+    letter-spacing: -0.03em; margin-bottom: 1.25rem;
     white-space: nowrap;
   }
   .hero h1 em { color: var(--teal); font-style: normal; }
   .hero-sub {
-    font-size: 17px; color: rgba(255,255,255,0.6);
-    line-height: 1.7; margin-bottom: 2rem; max-width: 520px;
+    font-size: 16px; color: rgba(255,255,255,0.5);
+    line-height: 1.75; margin-bottom: 2rem; max-width: 520px;
   }
-  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-btns { display: flex; gap: 16px; align-items: center; }
   .btn-primary {
     background: var(--orange); color: #fff;
-    font-weight: 600; font-size: 15px;
-    padding: 13px 28px; border-radius: 7px; transition: background .2s;
+    font-weight: 600; font-size: 14px;
+    padding: 13px 26px; border-radius: 7px;
+    transition: background .2s;
   }
   .btn-primary:hover { background: #d96820; }
   .btn-outline {
-    background: transparent; color: #fff;
-    font-weight: 600; font-size: 15px;
-    padding: 13px 28px; border-radius: 7px;
-    border: 1.5px solid rgba(255,255,255,0.25); transition: border-color .2s;
+    background: transparent; color: rgba(255,255,255,0.6);
+    font-weight: 500; font-size: 14px;
+    padding: 13px 0; border: none;
+    transition: color .2s;
   }
-  .btn-outline:hover { border-color: rgba(255,255,255,0.6); }
+  .btn-outline:hover { color: #fff; }
 
-  /* HERO STATS — vpravo dole */
-  .hero-stats {
-    display: flex;
-    align-items: flex-end;
-    gap: 0;
-    flex-shrink: 0;
-    padding-bottom: 4px;
-  }
-  .hero-stat { text-align: center; padding: 0 32px; }
+  /* stats — vpravo dole, Turing styl */
+  .hero-stats { display: flex; gap: 60px; align-items: flex-end; flex-shrink: 0; }
+  .hero-stat { text-align: center; }
   .hero-stat-num {
-    font-family: var(--font-head); font-weight: 300;
-    font-size: 56px; color: #fff;
-    line-height: 1; letter-spacing: -0.03em;
-    margin-bottom: 8px;
+    font-family: var(--font-head); font-weight: 200;
+    font-size: 64px; color: #fff;
+    line-height: 1; letter-spacing: -0.04em; margin-bottom: 10px;
   }
-  .hero-stat-plus { font-size: 32px; font-weight: 300; }
-  .hero-stat-label {
-    font-size: 13px; color: rgba(255,255,255,0.45);
-    font-weight: 400; white-space: nowrap;
+  .hero-stat-plus { font-size: 36px; font-weight: 200; }
+  .hero-stat-label { font-size: 14px; color: rgba(255,255,255,0.45); font-weight: 400; }
+  .hero-stat-divider { display: none; }
+
+  /* scroll */
+  .hero-scroll {
+    position: absolute; bottom: 32px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    cursor: pointer; opacity: 0.2; transition: opacity .2s; z-index: 10;
   }
-  .hero-stat-divider {
-    width: 1px; height: 56px;
-    background: rgba(255,255,255,0.1);
-    flex-shrink: 0;
+  .hero-scroll:hover { opacity: 0.6; }
+  .hero-scroll span { font-size: 9px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #fff; }
+  .hero-scroll-line {
+    width: 1px; height: 36px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.8), transparent);
+    animation: scrollDown 2s ease-in-out infinite;
+  }
+  @keyframes scrollDown {
+    0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+    30% { opacity: 1; }
+    70% { transform: scaleY(1); transform-origin: top; }
+    71% { transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+  }
+
+
+  /* responsive */
+  @media (max-width: 900px) {
+    .hero-stat { padding: 0 24px; }
+    .hero-stat-num { font-size: 36px; }
+    .hero h1 { font-size: 36px; }
   }
 
   /* STATS BAR */
@@ -194,7 +228,29 @@
 
   /* SERVICES REVEAL — scroll driven */
   .services-reveal { position:relative; display:grid; grid-template-columns:420px 1fr; height:480px; overflow:hidden; background:#0d1520; }
-  .srv-left { position:sticky; top:0; height:480px; display:flex; flex-direction:column; justify-content:center; padding:44px 5% 44px 5%; z-index:10; background:linear-gradient(to right, rgba(13,21,32,1) 0%, rgba(13,21,32,0.97) 70%, rgba(13,21,32,0) 100%); }
+
+  /* FULLWIDTH PHOTO BACKGROUND */
+  .srv-bg-full {
+    position:absolute; inset:0; z-index:0;
+    transition:opacity .55s ease;
+  }
+  .srv-bg-full img {
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover; object-position:center;
+  }
+  .srv-bg-full::after {
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(to right,
+      rgba(13,21,32,0.97) 0%,
+      rgba(13,21,32,0.85) 30%,
+      rgba(13,21,32,0.4) 60%,
+      rgba(13,21,32,0.15) 100%);
+    z-index:1;
+  }
+
+  .srv-left { position:sticky; top:0; height:480px; display:flex; flex-direction:column; justify-content:center; padding:44px 5% 44px 5%; z-index:10; }
   .srv-eyebrow { font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--teal); margin-bottom:28px; }
   .srv-items { display:flex; flex-direction:column; }
   .srv-item { display:flex; align-items:center; gap:14px; padding:15px 0; border-bottom:0.5px solid rgba(255,255,255,0.06); cursor:pointer; }
@@ -212,29 +268,23 @@
   .srv-info-result { font-size:10px; font-weight:600; color:var(--teal); letter-spacing:0.03em; margin-bottom:14px; }
   .srv-cta { display:inline-flex; align-items:center; gap:5px; background:var(--orange); color:#fff; font-size:12px; font-weight:600; padding:8px 16px; border-radius:6px; transition:background .2s; }
   .srv-cta:hover { background:#d96820; }
+
   /* right scroll */
-  .srv-right { overflow-y:scroll; height:480px; scrollbar-width:none; scroll-snap-type:y mandatory; }
+  .srv-right { overflow-y:scroll; height:480px; scrollbar-width:none; scroll-snap-type:y mandatory; position:relative; z-index:5; }
   .srv-right::-webkit-scrollbar { display:none; }
-  .srv-panel { height:480px; position:relative; display:flex; align-items:center; justify-content:center; scroll-snap-align:start; flex-shrink:0; }
-  .srv-panel-bg {
-    position:absolute; inset:0; overflow:hidden;
-  }
-  .srv-panel-bg::after {
-    content:'';
-    position:absolute; inset:0;
-    background:linear-gradient(to right, rgba(10,21,32,0.75) 0%, rgba(10,21,32,0.3) 50%, rgba(10,21,32,0.1) 100%);
-    z-index:1;
-  }
-  .srv-panel-bg img { position:absolute;inset:0;width:100%;height:100%;object-fit:cover; }
+  .srv-panel { height:480px; position:relative; display:flex; align-items:center; justify-content:center; scroll-snap-align:start; flex-shrink:0; background:transparent; }
+  .srv-panel-bg { display:none; }
   .srv-panel-device { position:relative; z-index:1; }
+
   /* progress dots */
   .srv-dots { position:absolute; right:20px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:8px; z-index:20; }
   .srv-dot { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,0.2); cursor:pointer; transition:background .3s, height .3s, border-radius .3s; }
   .srv-dot.active { background:var(--teal); height:18px; border-radius:3px; }
+
   /* mobile */
   @media (max-width:900px) {
     .services-reveal { grid-template-columns:1fr; height:auto; }
-    .srv-left { position:relative; height:auto; padding:36px 5%; background:rgba(13,21,32,1); }
+    .srv-left { position:relative; height:auto; padding:36px 5%; }
     .srv-right { height:300px; }
     .srv-panel { height:300px; }
     .srv-dots { display:none; }
@@ -266,6 +316,8 @@
   .seg-photo-wrap { position:relative; width:100%; height:100%; overflow:hidden; }
   .seg-photo-bg {
     position:absolute; inset:0;
+    background-size:cover;
+    background-position:center;
     transition:transform .6s cubic-bezier(.25,.46,.45,.94);
     will-change:transform;
   }
@@ -464,12 +516,10 @@
   @media (max-width: 900px) {
     .nav-links { display: none; }
     .nav-toggle { display: block; }
-    .hero-inner { flex-direction: column; align-items: flex-start; gap: 48px; }
-    .hero-stats { padding-bottom: 0; gap: 0; }
-    .hero-stat { padding: 0 24px; }
-    .hero-stat:first-child { padding-left: 0; }
+    .hero-inner { flex-direction: column; align-items: flex-start; gap: 40px; }
+    .hero h1 { white-space: normal; font-size: 32px; }
+    .hero-stats { gap: 32px; }
     .hero-stat-num { font-size: 40px; }
-    .hero-stat-plus { font-size: 24px; }
     .services-grid { grid-template-columns: repeat(2,1fr); }
     .segments-grid { grid-template-columns: 1fr; }
     .segments-elegant { grid-template-columns: 1fr; }
@@ -489,7 +539,9 @@
   @media (max-width: 600px) {
     .services-grid { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr; }
-    .hero h1 { font-size: 22px; white-space: normal; }
+    .hero h1 { font-size: 26px; }
+    .hero-stats { gap: 24px; }
+    .hero-stat-num { font-size: 32px; }
   }
 </style>
 <!-- SEO: FAQ Schema — zobrazí se přímo ve výsledcích Google -->
@@ -550,13 +602,15 @@
   <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
 
-<!-- 1. HERO -->
 <section class="hero">
+  <div class="hero-bg">
+    <img src="public/images/vzt-hyperbara.jpg" alt="Realizace vzduchotechniky AIRNOVA na střeše objektu">
+  </div>
   <div class="hero-inner">
 
     <div class="hero-content">
-      <h1>Úsporné <em>vytápění</em>, efektivní<br><em>chlazení</em> a <em>větrání</em> pro váš projekt</h1>
-      <p class="hero-sub">Navrhujeme a montujeme tepelná čerpadla, klimatizace a rekuperace na klíč. Přebíráme veškerou byrokracii s projektem i dotacemi. Smluvně garantujeme pevný termín dokončení prací a čistotu na stavbě.</p>
+      <h1>Úsporné <em>vytápění</em>,<br>efektivní <em>chlazení</em><br>a spolehlivé <em>větrání</em> pro váš projekt</h1>
+      <p class="hero-sub">Navrhujeme a montujeme tepelná čerpadla, klimatizace a rekuperace na klíč. Přebíráme projekt i dotace. Smluvně garantujeme termín a čistotu na stavbě.</p>
       <div class="hero-btns">
         <a class="btn-primary" href="#kontakt">Získat nezávaznou nabídku</a>
         <a class="btn-outline" href="#sluzby">Naše služby</a>
@@ -568,23 +622,27 @@
         <div class="hero-stat-num"><span class="countup" data-target="12">0</span><span class="hero-stat-plus">+</span></div>
         <div class="hero-stat-label">let praxe v TZB</div>
       </div>
-      <div class="hero-stat-divider"></div>
       <div class="hero-stat">
         <div class="hero-stat-num"><span class="countup" data-target="50">0</span><span class="hero-stat-plus">+</span></div>
         <div class="hero-stat-label">realizovaných projektů</div>
       </div>
-      <div class="hero-stat-divider"></div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">MSK</div>
-        <div class="hero-stat-label">Ostrava a okolí</div>
-      </div>
     </div>
 
+  </div>
+
+  <div class="hero-scroll" onclick="document.getElementById('sluzby').scrollIntoView({behavior:'smooth'})">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
   </div>
 </section>
 
 <!-- 3. CO DĚLÁME -->
 <section class="services-reveal" id="sluzby">
+
+  <!-- FULLWIDTH BACKGROUND FOTO -->
+  <div class="srv-bg-full" id="srvBgFull">
+    <img src="public/images/vzt-trebovice.jpg" alt="Sportovní hala Třebovice — realizace VZT AIRNOVA" id="srvBgImg">
+  </div>
 
   <!-- LEVA — sticky nadpisy -->
   <div class="srv-left">
@@ -613,7 +671,7 @@
     </div>
     <div class="srv-info">
       <div class="srv-info-desc" id="srv-desc">Rekuperace, nucené větrání a VZT systémy pro domy, kanceláře i průmyslové objekty v MSK regionu.</div>
-      <div class="srv-info-result" id="srv-result">Hala Snakes · Krakovská · Střelnice MP</div>
+      <div class="srv-info-result" id="srv-result">Sportovní hala Třebovice · Hala Snakes · Střelnice MP</div>
       <a class="srv-cta" href="#kontakt">Probrat projekt →</a>
     </div>
   </div>
@@ -623,7 +681,7 @@
 
     <div class="srv-panel">
       <div class="srv-panel-bg">
-        <img src="vzduchotechnika.png" alt="Montáž vzduchotechniky AIRNOVA" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right center;">
+        <img src="public/images/vzt-trebovice.jpg" alt="Montáž vzduchotechniky AIRNOVA" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right center;">
       </div>
     </div>
 
@@ -691,8 +749,6 @@
 
 </section>
 
-</section>
-
 
 
 <!-- 4. BRANDS -->
@@ -725,8 +781,7 @@
 
     <a class="seg-photo-card" href="#kontakt">
       <div class="seg-photo-wrap">
-        <!-- Cloudinary: https://res.cloudinary.com/airnova/image/upload/v1/segments/novostavba.jpg -->
-        <div class="seg-photo-bg" style="background:linear-gradient(135deg,#1A2B3A 0%,#2A3B5A 100%);"></div>
+        <div class="seg-photo-bg" style="background-image:url('public/images/reference-jistebnik.jpg');"></div>
         <div class="seg-photo-gradient"></div>
         <div class="seg-photo-content">
           <div class="seg-photo-title">Stavím nebo rekonstruuji</div>
@@ -738,8 +793,7 @@
 
     <a class="seg-photo-card" href="#kontakt">
       <div class="seg-photo-wrap">
-        <!-- Cloudinary: https://res.cloudinary.com/airnova/image/upload/v1/segments/spravce.jpg -->
-        <div class="seg-photo-bg" style="background:linear-gradient(135deg,#1A3A2B 0%,#2A5A3B 100%);"></div>
+        <div class="seg-photo-bg" style="background-image:url('public/images/reference-zoo-cic.jpg');"></div>
         <div class="seg-photo-gradient"></div>
         <div class="seg-photo-content">
           <div class="seg-photo-title">Spravuji objekty</div>
@@ -751,8 +805,7 @@
 
     <a class="seg-photo-card" href="#kontakt">
       <div class="seg-photo-wrap">
-        <!-- Cloudinary: https://res.cloudinary.com/airnova/image/upload/v1/segments/developer.jpg -->
-        <div class="seg-photo-bg" style="background:linear-gradient(135deg,#2A1A3A 0%,#3A2A5A 100%);"></div>
+        <div class="seg-photo-bg" style="background-image:url('public/images/vzt-nosovice.jpg');"></div>
         <div class="seg-photo-gradient"></div>
         <div class="seg-photo-content">
           <div class="seg-photo-title">Rozvíjím nemovitosti</div>
@@ -764,8 +817,7 @@
 
     <a class="seg-photo-card" href="#kontakt">
       <div class="seg-photo-wrap">
-        <!-- Cloudinary: https://res.cloudinary.com/airnova/image/upload/v1/segments/prumysl.jpg -->
-        <div class="seg-photo-bg" style="background:linear-gradient(135deg,#2A2A1A 0%,#3A3A2A 100%);"></div>
+        <div class="seg-photo-bg" style="background-image:url('public/images/reference-rockwool.jpg');"></div>
         <div class="seg-photo-gradient"></div>
         <div class="seg-photo-content">
           <div class="seg-photo-title">Průmysl a výroba</div>
@@ -1054,20 +1106,27 @@
 <script>
   // Services scroll-driven
   const srvData = [
-    {desc:'Rekuperace, nucené větrání a VZT systémy pro domy, kanceláře i průmyslové objekty v MSK regionu.', result:'Hala Snakes · Krakovská · Střelnice MP'},
-    {desc:'Podlahové vytápění, kotle, otopné soustavy i tepelná čerpadla. Celý systém od zdroje tepla po radiátor — včetně dotací NZÚ.', result:'Bílovecká · Projekt a montáž · Dotace NZÚ'},
-    {desc:'Split, multi-split a VRF systémy. Certifikovaná montáž F-gas kat. I pro domy, kanceláře i průmysl v Ostravě a MSK.', result:'Rychlá montáž · F-gas kat. I · MSK'},
-    {desc:'Rozvody vody, kanalizace a plynu v MSK. Kompletní ZTI pro novostavby i rekonstrukce — Ostrava a okolí.', result:'Novostavby i rekonstrukce · Ostrava'}
+    {desc:'Rekuperace, nucené větrání a VZT systémy pro domy, kanceláře i průmyslové objekty v MSK regionu.', result:'Sportovní hala Třebovice · Hala Snakes · Střelnice MP', img:'public/images/vzt-trebovice.jpg'},
+    {desc:'Podlahové vytápění, kotle, otopné soustavy i tepelná čerpadla. Celý systém od zdroje tepla po radiátor — včetně dotací NZÚ.', result:'Kotelna Třebovice · Projekt a montáž · Dotace NZÚ', img:'public/images/vytapeni-kotelna-trebovice.jpg'},
+    {desc:'Split, multi-split a VRF systémy. Certifikovaná montáž F-gas kat. I pro domy, kanceláře i průmysl v Ostravě a MSK.', result:'Daikin VRV IV · F-gas kat. I · MSK', img:'public/images/klimatizace-daikin-hyperbara.jpg'},
+    {desc:'Rozvody vody, kanalizace a plynu v MSK. Kompletní ZTI pro novostavby i rekonstrukce — Ostrava a okolí.', result:'Novostavby i rekonstrukce · Ostrava', img:''}
   ];
   function srvSetActive(i) {
     document.querySelectorAll('.srv-item').forEach((x,j) => x.classList.toggle('active', j===i));
     document.querySelectorAll('.srv-dot').forEach((x,j) => x.classList.toggle('active', j===i));
     const desc = document.getElementById('srv-desc');
     const res = document.getElementById('srv-result');
+    const bgImg = document.getElementById('srvBgImg');
     desc.style.opacity = '0';
     setTimeout(() => {
       desc.textContent = srvData[i].desc;
       res.textContent = srvData[i].result;
+      if (srvData[i].img && bgImg) {
+        bgImg.src = srvData[i].img;
+        bgImg.style.display = 'block';
+      } else if (bgImg) {
+        bgImg.style.display = 'none';
+      }
       desc.style.transition = 'opacity .3s';
       desc.style.opacity = '1';
     }, 160);
