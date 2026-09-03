@@ -2,12 +2,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Mobile menu drawer
   const navToggle = document.querySelector('.nav-toggle');
   const mobileMenu = document.getElementById('mobileMenu');
-  const promoBar = document.querySelector('.nav-promo-bar');
   const navEl = document.querySelector('nav');
   function positionMobileMenu() {
     if (!mobileMenu) return;
-    const headerH = (promoBar ? promoBar.offsetHeight : 0) + (navEl ? navEl.offsetHeight : 0);
-    mobileMenu.style.top = headerH + 'px';
+    // nav is position:sticky, so its live bounding rect already reflects
+    // where the visible header currently ends — including when the (non-sticky)
+    // promo bar above it has been scrolled out of view.
+    const headerH = navEl ? navEl.getBoundingClientRect().bottom : 0;
+    mobileMenu.style.top = Math.max(headerH, 0) + 'px';
   }
   if (navToggle && mobileMenu) {
     positionMobileMenu();

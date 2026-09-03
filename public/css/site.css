@@ -67,7 +67,7 @@
     font-family: var(--font-head); font-weight: 700; font-size: 15px;
     text-align: center; padding: 15px; border-radius: 999px;
   }
-  @media (min-width: 901px) { .mobile-menu { display: none !important; } }
+  @media (min-width: 1181px) { .mobile-menu { display: none !important; } }
 
   /* HERO — Turing layout */
   .hero {
@@ -524,11 +524,10 @@
   .popup-success p { font-size: 14px; color: var(--text-mid); }
 
   /* RESPONSIVE */
+  /* Below this width the 8 nav links + logo + search + CTA can no longer fit
+     the header, so switch straight to the hamburger drawer here instead of
+     leaving a narrower two-stage zone where items would overlap/overflow. */
   @media (max-width: 1180px) {
-    .nav-tel { display: none; }
-    .nav-links { gap: 1rem; }
-  }
-  @media (max-width: 900px) {
     .nav-promo-bar { display: block; background: var(--teal); text-align: center; padding: 12px 5%; }
     .nav-promo-bar a { display: inline-flex; align-items: center; gap: 6px; color: var(--navy-dark); font-family: var(--font-head); font-weight: 700; font-size: 13px; letter-spacing: 0.02em; }
     .nav-promo-bar svg { width: 14px; height: 14px; }
@@ -536,6 +535,8 @@
     .nav-tel, .nav-cta { display: none; }
     .nav-toggle { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 12px rgba(0,210,255,0.5); }
     .nav-toggle span { background: var(--navy-dark); width: 18px; margin: 2.5px 0; }
+  }
+  @media (max-width: 900px) {
     .hero-inner { flex-direction: column; align-items: flex-start; gap: 40px; }
     .hero h1 { white-space: normal; font-size: 32px; }
     .hero-stats { gap: 32px; }
