@@ -467,8 +467,13 @@
   .lead-form-success .success-icon svg { width: 28px; height: 28px; }
   .lead-form-success h3 { font-family: var(--font-head); font-weight: 800; font-size: 20px; color: var(--navy); margin-bottom: 8px; }
   .lead-form-success p { font-size: 14px; color: var(--text-mid); }
-  .lead-form-iframe { width: 100%; min-height: 1150px; border: none; border-radius: 12px; background: transparent; }
-  .lead-form-disclaimer a { color: var(--teal); font-weight: 600; }
+  .lead-form-cta-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; background: var(--orange); color: #fff; font-family: var(--font-head); font-weight: 700;
+    font-size: 16px; padding: 18px; border-radius: 10px; transition: background .2s, transform .2s;
+  }
+  .lead-form-cta-btn:hover { background: #d96820; transform: translateY(-1px); }
+  .lead-form-cta-btn svg { width: 18px; height: 18px; }
 
   .lead-contact-card { background: var(--navy-dark); border-radius: 20px; padding: 40px 34px; color: #fff; }
   .lead-contact-card h3 { font-family: var(--font-head); font-weight: 800; font-size: 19px; margin-bottom: 24px; letter-spacing: -0.01em; }
