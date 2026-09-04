@@ -467,6 +467,9 @@
   .lead-form-success .success-icon svg { width: 28px; height: 28px; }
   .lead-form-success h3 { font-family: var(--font-head); font-weight: 800; font-size: 20px; color: var(--navy); margin-bottom: 8px; }
   .lead-form-success p { font-size: 14px; color: var(--text-mid); }
+  .lead-form-error { display: none; margin-top: 16px; padding: 14px 16px; border-radius: 8px; background: #FCE5D4; color: #8A3A10; font-size: 13.5px; font-weight: 500; text-align: center; }
+  .lead-form-error a { color: inherit; font-weight: 700; text-decoration: underline; }
+  .lead-form-error.show { display: block; }
   .lead-form-cta-btn {
     display: flex; align-items: center; justify-content: center; gap: 10px;
     width: 100%; background: var(--orange); color: #fff; font-family: var(--font-head); font-weight: 700;

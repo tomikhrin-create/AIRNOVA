@@ -1,4 +1,76 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Lead form — submits straight into the Airtable CRM via /api/submit-lead
+  // (a Vercel serverless function holding the Airtable token server-side).
+  const leadForm = document.getElementById('leadForm');
+  if (leadForm) {
+    const submitBtn = document.getElementById('leadFormSubmit');
+    const successEl = document.getElementById('leadFormSuccess');
+    const errorEl = document.getElementById('leadFormError');
+    const MAX_FILE_BYTES = 3 * 1024 * 1024;
+
+    function fileToDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    leadForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      errorEl.classList.remove('show');
+
+      const jmeno = document.getElementById('lfJmeno').value.trim();
+      const prijmeni = document.getElementById('lfPrijmeni').value.trim();
+      const email = document.getElementById('lfEmail').value.trim();
+      const telefon = document.getElementById('lfTelefon').value.trim();
+      const bydliste = document.getElementById('lfBydliste').value.trim();
+      const typ = document.getElementById('lfTyp').value;
+      const poznamka = document.getElementById('lfPoznamka').value.trim();
+      const souborInput = document.getElementById('lfSoubor');
+      const soubor = souborInput && souborInput.files[0];
+
+      if (!jmeno || !prijmeni || !email || !telefon || !bydliste || !typ) return;
+
+      if (soubor && soubor.size > MAX_FILE_BYTES) {
+        errorEl.textContent = 'Soubor je moc velký (max. 3 MB). Zkuste ho zmenšit nebo nám ho pošlete e-mailem.';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Odesílám...';
+
+      try {
+        const payload = { jmeno, prijmeni, email, telefon, bydliste, typ, poznamka };
+        if (soubor) {
+          payload.soubor = {
+            filename: soubor.name,
+            contentType: soubor.type || 'application/octet-stream',
+            dataUrl: await fileToDataUrl(soubor),
+          };
+        }
+
+        const res = await fetch('/api/submit-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) throw new Error('submit failed');
+
+        leadForm.style.display = 'none';
+        successEl.classList.add('show');
+      } catch (err) {
+        errorEl.textContent = 'Něco se nepovedlo. Zkuste to prosím znovu, nebo nám zavolejte na 732 585 550.';
+        errorEl.classList.add('show');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Odeslat poptávku';
+      }
+    });
+  }
+
   // Mobile menu drawer
   const navToggle = document.querySelector('.nav-toggle');
   const mobileMenu = document.getElementById('mobileMenu');

@@ -128,8 +128,63 @@
     <div class="lead-form-card">
       <h2 class="reveal-left">Máte projekt? Napište nám.</h2>
       <p class="lead-form-sub">Vyplňte pár údajů a ozveme se vám do 24 hodin s nezávaznou nabídkou.</p>
-      <a class="lead-form-cta-btn" href="https://airtable.com/appcpul9UOCOYYIJQ/shrDcLjMlThv2WQ1m" target="_blank" rel="noopener">Otevřít poptávkový formulář <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-      <p class="lead-form-disclaimer">Formulář se otevře v nové záložce — vyplnění trvá necelou minutu.</p>
+      <form id="leadForm" novalidate>
+        <div class="lead-form-row">
+          <div class="lead-form-field">
+            <label for="lfJmeno">Jméno</label>
+            <input type="text" id="lfJmeno" name="jmeno" required autocomplete="given-name">
+          </div>
+          <div class="lead-form-field">
+            <label for="lfPrijmeni">Příjmení</label>
+            <input type="text" id="lfPrijmeni" name="prijmeni" required autocomplete="family-name">
+          </div>
+        </div>
+        <div class="lead-form-row">
+          <div class="lead-form-field">
+            <label for="lfEmail">E-mail</label>
+            <input type="email" id="lfEmail" name="email" required autocomplete="email">
+          </div>
+          <div class="lead-form-field">
+            <label for="lfTelefon">Telefon</label>
+            <input type="tel" id="lfTelefon" name="telefon" required autocomplete="tel">
+          </div>
+        </div>
+        <div class="lead-form-row">
+          <div class="lead-form-field">
+            <label for="lfBydliste">Bydliště / lokalita</label>
+            <input type="text" id="lfBydliste" name="bydliste" required autocomplete="address-level2">
+          </div>
+          <div class="lead-form-field">
+            <label for="lfTyp">Mám zájem o</label>
+            <select id="lfTyp" name="typ" required>
+              <option value="" disabled selected>Vyberte...</option>
+              <option>Rekuperace</option>
+              <option>Klimatizace</option>
+              <option>Vytápění</option>
+              <option>Vzduchotechnika</option>
+              <option>Servis a údržba</option>
+              <option>Jiné</option>
+            </select>
+          </div>
+        </div>
+        <div class="lead-form-field lead-form-field-standalone">
+          <label for="lfPoznamka">Popis požadavku / poznámka</label>
+          <textarea id="lfPoznamka" name="poznamka" rows="4" placeholder="Popište nám stručně, co potřebujete vyřešit..."></textarea>
+        </div>
+        <div class="lead-form-field lead-form-field-standalone">
+          <label for="lfSoubor">Přiložit dokument (PDF, volitelné)</label>
+          <input type="file" id="lfSoubor" name="soubor" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+          <span class="lead-form-file-hint">Např. výkres, fotka nebo technická zpráva. Max. 3&nbsp;MB.</span>
+        </div>
+        <button type="submit" class="lead-form-submit" id="leadFormSubmit">Odeslat poptávku <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+        <p class="lead-form-disclaimer">Odesláním souhlasíte se zpracováním osobních údajů za účelem vyřízení poptávky.</p>
+      </form>
+      <div class="lead-form-success" id="leadFormSuccess">
+        <div class="success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <h3>Děkujeme za poptávku!</h3>
+        <p>Ozveme se vám do 24 hodin.</p>
+      </div>
+      <p class="lead-form-error" id="leadFormError" hidden>Něco se nepovedlo. Zkuste to prosím znovu, nebo nám zavolejte na <a href="tel:+420732585550">732 585 550</a>.</p>
     </div>
 
     <div class="lead-contact-card">
