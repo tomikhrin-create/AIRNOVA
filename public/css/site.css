@@ -655,21 +655,28 @@
   .service-back-link svg { width: 15px; height: 15px; }
 
   /* "Proč se vám vyplatí" — 3-card grid on service subpages */
-  .svc-why { padding: 60px 5% 0; background: #fff; }
+  .svc-why { padding: 70px 5% 10px; background: var(--bg); }
   .svc-why-inner { max-width: 1100px; margin: 0 auto; }
   .svc-why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-  .svc-why-card { background: var(--teal-light); border-radius: 16px; padding: 28px 26px; }
-  .svc-why-icon { width: 42px; height: 42px; border-radius: 50%; background: var(--navy); color: var(--teal); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
-  .svc-why-icon svg { width: 20px; height: 20px; }
+  .svc-why-card { background: #fff; border: 1px solid rgba(42,43,90,0.07); border-radius: 18px; padding: 32px 26px; box-shadow: 0 10px 30px rgba(42,43,90,0.06); transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease; }
+  .svc-why-card:hover { transform: translateY(-5px); box-shadow: 0 18px 40px rgba(42,43,90,0.12); }
+  .svc-why-icon { position: relative; width: 58px; height: 58px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #7ae8ff, #00D2FF 70%); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 0 0 1px rgba(0,210,255,0.35), 0 6px 20px rgba(0,210,255,0.35); transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease; }
+  .svc-why-card:hover .svc-why-icon { transform: scale(1.08) rotate(-4deg); box-shadow: 0 0 0 1px rgba(0,210,255,0.4), 0 8px 26px rgba(0,210,255,0.55); }
+  .svc-why-icon::before { content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid rgba(0,210,255,0.4); animation: garance-pulse-anim 2.6s cubic-bezier(.4,0,.3,1) infinite; }
+  .svc-why-card:hover .svc-why-icon::before { animation-play-state: paused; opacity: 0; }
+  .svc-why-icon svg { position: relative; z-index: 1; width: 27px; height: 27px; color: #fff; filter: drop-shadow(0 0 3px rgba(255,255,255,0.5)); }
   .svc-why-card h3 { font-family: var(--font-head); font-weight: 800; font-size: 15px; color: var(--navy); text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 10px; }
   .svc-why-card p { font-size: 14.5px; color: var(--text-mid); line-height: 1.7; margin: 0; }
   @media (max-width: 900px) { .svc-why-grid { grid-template-columns: 1fr; } }
 
   /* Upgraded "Záruka a výhody" cards on service subpages — risk-reversal copy */
   .svc-guarantee { display: flex; flex-direction: column; gap: 14px; margin: 1.75rem 0 0; }
-  .svc-guarantee-item { display: flex; gap: 16px; align-items: flex-start; background: var(--bg); border-radius: 14px; padding: 18px 20px; }
-  .svc-guarantee-badge { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; background: var(--orange-light); color: var(--orange); display: flex; align-items: center; justify-content: center; }
-  .svc-guarantee-badge svg { width: 18px; height: 18px; }
+  .svc-guarantee-item { display: flex; gap: 18px; align-items: flex-start; background: #fff; border: 1px solid rgba(42,43,90,0.07); border-radius: 16px; padding: 20px 22px; box-shadow: 0 8px 24px rgba(42,43,90,0.05); transition: transform .25s ease, box-shadow .25s ease; }
+  .svc-guarantee-item:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(42,43,90,0.1); }
+  .svc-guarantee-badge { position: relative; flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #7ae8ff, #00D2FF 70%); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 1px rgba(0,210,255,0.35), 0 6px 18px rgba(0,210,255,0.35); }
+  .svc-guarantee-badge svg { width: 21px; height: 21px; filter: drop-shadow(0 0 3px rgba(255,255,255,0.5)); }
+  .svc-guarantee-item.is-highlight { border-color: rgba(242,124,46,0.18); box-shadow: 0 8px 24px rgba(242,124,46,0.1); }
+  .svc-guarantee-item.is-highlight .svc-guarantee-badge { background: radial-gradient(circle at 30% 30%, #ffc79a, var(--orange) 70%); box-shadow: 0 0 0 1px rgba(242,124,46,0.35), 0 6px 18px rgba(242,124,46,0.4); }
   .svc-guarantee-item h4 { font-family: var(--font-head); font-weight: 700; font-size: 15.5px; color: var(--navy); margin: 0 0 4px; }
   .svc-guarantee-item p { font-size: 14px; color: var(--text-mid); line-height: 1.65; margin: 0; }
 
