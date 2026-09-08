@@ -654,20 +654,19 @@
   .service-back-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--teal); margin-bottom: 1.5rem; }
   .service-back-link svg { width: 15px; height: 15px; }
 
-  /* "Proč se vám vyplatí" — 3-card grid on service subpages */
+  /* "Proč se vám vyplatí" — icon + text, centered, no card box */
   .svc-why { padding: 70px 5% 10px; background: var(--bg); }
   .svc-why-inner { max-width: 1100px; margin: 0 auto; }
-  .svc-why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-  .svc-why-card { background: #fff; border: 1px solid rgba(42,43,90,0.07); border-radius: 18px; padding: 32px 26px; box-shadow: 0 10px 30px rgba(42,43,90,0.06); transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease; }
-  .svc-why-card:hover { transform: translateY(-5px); box-shadow: 0 18px 40px rgba(42,43,90,0.12); }
+  .svc-why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .svc-why-card { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0; }
   .svc-why-icon { position: relative; width: 58px; height: 58px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #7ae8ff, #00D2FF 70%); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 0 0 1px rgba(0,210,255,0.35), 0 6px 20px rgba(0,210,255,0.35); transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease; }
   .svc-why-card:hover .svc-why-icon { transform: scale(1.08) rotate(-4deg); box-shadow: 0 0 0 1px rgba(0,210,255,0.4), 0 8px 26px rgba(0,210,255,0.55); }
   .svc-why-icon::before { content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid rgba(0,210,255,0.4); animation: garance-pulse-anim 2.6s cubic-bezier(.4,0,.3,1) infinite; }
   .svc-why-card:hover .svc-why-icon::before { animation-play-state: paused; opacity: 0; }
   .svc-why-icon svg { position: relative; z-index: 1; width: 27px; height: 27px; color: #fff; filter: drop-shadow(0 0 3px rgba(255,255,255,0.5)); }
   .svc-why-card h3 { font-family: var(--font-head); font-weight: 800; font-size: 15px; color: var(--navy); text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 10px; }
-  .svc-why-card p { font-size: 14.5px; color: var(--text-mid); line-height: 1.7; margin: 0; }
-  @media (max-width: 900px) { .svc-why-grid { grid-template-columns: 1fr; } }
+  .svc-why-card p { font-size: 14.5px; color: var(--text-mid); line-height: 1.7; margin: 0; max-width: 300px; }
+  @media (max-width: 900px) { .svc-why-grid { grid-template-columns: 1fr; gap: 34px; } }
 
   /* Upgraded "Záruka a výhody" cards on service subpages — risk-reversal copy */
   .svc-guarantee { display: flex; flex-direction: column; gap: 14px; margin: 1.75rem 0 0; }
