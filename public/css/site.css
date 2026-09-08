@@ -644,6 +644,7 @@
   }
 
   .service-body { padding: 90px 5%; background: #fff; }
+  .svc-why + .service-body { padding-top: 50px; }
   .service-body-inner { max-width: 760px; margin: 0 auto; }
   .service-body h2 { font-family: var(--font-head); font-weight: 800; font-size: clamp(22px, 2.6vw, 30px); color: var(--navy); margin: 3rem 0 1rem; letter-spacing: -0.02em; }
   .service-body h2:first-child { margin-top: 0; }
@@ -652,6 +653,25 @@
   .service-checklist li { display: flex; align-items: center; gap: 14px; font-size: 15.5px; font-weight: 700; color: var(--navy); }
   .service-back-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--teal); margin-bottom: 1.5rem; }
   .service-back-link svg { width: 15px; height: 15px; }
+
+  /* "Proč se vám vyplatí" — 3-card grid on service subpages */
+  .svc-why { padding: 60px 5% 0; background: #fff; }
+  .svc-why-inner { max-width: 1100px; margin: 0 auto; }
+  .svc-why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .svc-why-card { background: var(--teal-light); border-radius: 16px; padding: 28px 26px; }
+  .svc-why-icon { width: 42px; height: 42px; border-radius: 50%; background: var(--navy); color: var(--teal); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .svc-why-icon svg { width: 20px; height: 20px; }
+  .svc-why-card h3 { font-family: var(--font-head); font-weight: 800; font-size: 15px; color: var(--navy); text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 10px; }
+  .svc-why-card p { font-size: 14.5px; color: var(--text-mid); line-height: 1.7; margin: 0; }
+  @media (max-width: 900px) { .svc-why-grid { grid-template-columns: 1fr; } }
+
+  /* Upgraded "Záruka a výhody" cards on service subpages — risk-reversal copy */
+  .svc-guarantee { display: flex; flex-direction: column; gap: 14px; margin: 1.75rem 0 0; }
+  .svc-guarantee-item { display: flex; gap: 16px; align-items: flex-start; background: var(--bg); border-radius: 14px; padding: 18px 20px; }
+  .svc-guarantee-badge { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; background: var(--orange-light); color: var(--orange); display: flex; align-items: center; justify-content: center; }
+  .svc-guarantee-badge svg { width: 18px; height: 18px; }
+  .svc-guarantee-item h4 { font-family: var(--font-head); font-weight: 700; font-size: 15.5px; color: var(--navy); margin: 0 0 4px; }
+  .svc-guarantee-item p { font-size: 14px; color: var(--text-mid); line-height: 1.65; margin: 0; }
 
   /* O NÁS */
   .about-hero { background: var(--navy-dark); padding: 150px 5% 90px; text-align: center; }
